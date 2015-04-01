@@ -57,7 +57,9 @@ namespace Questionnaire2.Controllers
 
         public ActionResult Download()
         {
-            return View();
+            var userId = WebSecurity.GetUserId(User.Identity.Name);
+            UserLevel userLevel = _db.UserLevels.Where(x => x.UserId == userId).FirstOrDefault();
+            return View(userLevel);
         }
 
         //
@@ -263,44 +265,10 @@ namespace Questionnaire2.Controllers
                 page.Canvas.DrawRectangle(pen2, new System.Drawing.Rectangle(new Point(0, 0), new Size(762, 515)));
 
                 //Save pdf file.
-                doc.SaveToFile(output);
-                doc.Close();
+                //doc.SaveToFile(output);
+                //doc.Close();
 
-
-
-                //Spire.Pdf.PdfDocument pdf = new Spire.Pdf.PdfDocument();
-
-                //PdfHtmlLayoutFormat htmlLayoutFormat = new PdfHtmlLayoutFormat();
-                ////webBrowser load html whether Waiting
-                //htmlLayoutFormat.IsWaiting = false;
-                ////page setting
-                //PdfPageSettings setting = new PdfPageSettings();
-                //setting.Size = PdfPageSize.A4;
-                //setting.Orientation = PdfPageOrientation.Landscape;
-                ////pdf.PageScaling = PdfPrintPageScaling.ShrinkOversized;
-
-                //string htmlCode = System.IO.File.ReadAllText(file);
-                //Thread thread = new Thread(() =>
-                //{ pdf.LoadFromHTML(htmlCode, false, setting, htmlLayoutFormat); });
-                //thread.SetApartmentState(ApartmentState.STA);
-                //thread.Start();
-                //thread.Join();
-
-                //PdfPageBase page = pdf.Pages.Add();
-
-                //Spire.Pdf.Graphics.PdfImage image = Spire.Pdf.Graphics.PdfImage.FromFile(graphic_1);
-                //float width = image.Width * 0.75f;
-                //float height = image.Height * 0.75f;
-                //float x = (page.Canvas.ClientSize.Width - width) / 2;
-                //page.Canvas.DrawImage(image, x, 60, width, height);
-
-
-                //pdf.SaveToFile(output);
-
-
-                //StreamReader streamReader = new StreamReader(file);
-                //string tableHtml = streamReader.ReadToEnd();
-                //tableToPdf(this, new EventArgs(), tableHtml);
+                doc.SaveToHttpResponse("Certificate.pdf", System.Web.HttpContext.Current.Response, HttpReadType.Open);
             }
 
             if (ModelState.IsValid)

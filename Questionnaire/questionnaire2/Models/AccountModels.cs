@@ -87,7 +87,6 @@ namespace Questionnaire2.Models
         [Display(Name = "Last name")]
         public string LastName { get; set; }
 
-        [Required]
         [Display(Name = "Middle Initial")]
         public string MiddleInitial { get; set; }
 
