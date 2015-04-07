@@ -726,6 +726,33 @@ table {
         margin: 4px;
         padding-left: 4px;
     }
+    table.verified {
+        border-spacing: 1px 2px;
+        border-collapse: separate;
+        margin-bottom: 10px;
+        margin: 4px;
+        padding-left: 4px;
+        padding-right: 4px;
+        width: 98%;
+    }
+    table.unverified {
+        border-spacing: 1px 2px;
+        border-collapse: separate;
+        margin-bottom: 10px;
+        margin: 4px;
+        padding-left: 4px;
+        padding-right: 4px;
+        width: 98%;
+    }
+    table.verifyIndividual {
+        border-spacing: 1px 3px;
+        border-collapse: separate;
+        margin-bottom: 10px;
+        margin: 4px;
+        padding-left: 4px;
+        padding-right: 4px;
+        width: 98%;
+    }
     table.websiteSettings {
         border-spacing: 1px 2px;
         border-collapse: separate;

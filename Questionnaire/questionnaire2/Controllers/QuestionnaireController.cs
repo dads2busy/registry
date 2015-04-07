@@ -298,6 +298,11 @@ namespace Questionnaire2.Controllers
             if (remove == null)
                 remove = new int[0];
 
+            if (qQuestions == null || qQuestions.Count() == 0)
+            {
+                var qq = new QuestionnaireQuestion { Ordinal = 1, QuestionnaireId = 1, QQCategoryId = 7, Question = new Question { QuestionText = "temp" } };
+            }
+
             QuestionnaireQuestion[] enumerable = qQuestions as QuestionnaireQuestion[] ?? qQuestions.ToArray();
             int? id = enumerable[0].QuestionnaireId;
 

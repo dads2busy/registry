@@ -9,17 +9,14 @@ using WebMatrix.WebData;
 using Questionnaire2.Helpers;
 using System.IO;
 using System.Transactions;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using System;
 using System.Web;
 using System.Text;
-using Aspose.Words;
-using Aspose.Words.Saving;
-using iTextSharp.text.html.simpleparser;
-using Spire.Pdf.HtmlConverter;
 using Spire.Pdf;
+using Spire.Pdf.HtmlConverter;
 using Spire.Pdf.Graphics;
+using Spire.Doc;
+using Spire.Doc.Documents;
 using System.Threading;
 using System.Drawing;
 
@@ -80,12 +77,16 @@ namespace Questionnaire2.Controllers
                     var formatted = fui.Format();
                     var ms = MakeWordFile.CreateDocument(formatted);
                     var ms2 = new MemoryStream(ms.ToArray());
+
+
+                    Spire.Doc.Document doc = new Spire.Doc.Document(ms2);
+                    doc.SaveToFile("Portfolio.docx", Spire.Doc.FileFormat.Docx, System.Web.HttpContext.Current.Response, HttpContentType.InBrowser);
             
-                    Response.Clear();
-                    Response.AddHeader("content-disposition", "attachment; filename=\"Portfolio.docx\"");
-                    Response.ContentType = "application/msword";
-                    ms2.WriteTo(Response.OutputStream);
-                    Response.End(); 
+                    //Response.Clear();
+                    //Response.AddHeader("content-disposition", "attachment; filename=\"Portfolio.docx\"");
+                    //Response.ContentType = "application/msword";
+                    //ms2.WriteTo(Response.OutputStream);
+                    //Response.End(); 
                 }
                 catch (Exception ex)
                 { Response.Write(ex.Message); }
@@ -102,16 +103,11 @@ namespace Questionnaire2.Controllers
                     var ms = MakeWordFile.CreateDocument(formatted);
                     var ms2 = new MemoryStream(ms.ToArray());
 
-                    Aspose.Words.Document doc = new Aspose.Words.Document(ms2);
-                    var ms3 = new MemoryStream();
-                    doc.Save(ms3, SaveFormat.Pdf);
+                    var appRoot = Request.PhysicalApplicationPath;
+                    var output = appRoot + "Content\\Portfolio.pdf";
 
-                    Response.Clear();
-                    Response.ContentType = "application/pdf";
-                    Response.AddHeader("content-disposition", "attachment; filename=\"Portfolio.pdf\"");
-
-                    ms3.WriteTo(Response.OutputStream);
-                    Response.End();
+                    Spire.Doc.Document doc = new Spire.Doc.Document(ms2);
+                    doc.SaveToFile("Portfolio.pdf", Spire.Doc.FileFormat.PDF, System.Web.HttpContext.Current.Response, HttpContentType.InBrowser);
                 }
                 catch (Exception ex)
                 { Response.Write(ex.Message); }
@@ -436,38 +432,38 @@ namespace Questionnaire2.Controllers
             return RedirectToAction("Index");
         }
 
-        public void tableToPdf(object sender, EventArgs e, string pageHtml)
-        {
-            //Set page size as A4
-            iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 20, 10, 10, 10);
+        //public void tableToPdf(object sender, EventArgs e, string pageHtml)
+        //{
+        //    //Set page size as A4
+        //    iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 20, 10, 10, 10);
 
-            try
-            {
-                var ms = new MemoryStream();
-                PdfWriter.GetInstance(pdfDoc, ms);
-                //Open PDF Document to write data
-                pdfDoc.Open();
-                //Read string contents using stream reader and convert html to parsed conent
-                var parsedHtmlElements = HTMLWorker.ParseToList(new StringReader(pageHtml), null);
-                //Get each array values from parsed elements and add to the PDF document
-                foreach (var htmlElement in parsedHtmlElements)
-                    pdfDoc.Add(htmlElement as IElement);
-                //Close your PDF
-                pdfDoc.Close();
-                var ms2 = new MemoryStream(ms.ToArray());
-                Response.Buffer = true;
-                Response.ContentType = "application/pdf";
-                //Set default file Name as current datetime
-                Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("yyyyMMdd") + ".pdf");
-                Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                ms2.WriteTo(Response.OutputStream);
-                Response.End();
-            }
-            catch (Exception ex)
-            {
-                Response.Write(ex.ToString());
-            }
-        }
+        //    try
+        //    {
+        //        var ms = new MemoryStream();
+        //        PdfWriter.GetInstance(pdfDoc, ms);
+        //        //Open PDF Document to write data
+        //        pdfDoc.Open();
+        //        //Read string contents using stream reader and convert html to parsed conent
+        //        var parsedHtmlElements = HTMLWorker.ParseToList(new StringReader(pageHtml), null);
+        //        //Get each array values from parsed elements and add to the PDF document
+        //        foreach (var htmlElement in parsedHtmlElements)
+        //            pdfDoc.Add(htmlElement as IElement);
+        //        //Close your PDF
+        //        pdfDoc.Close();
+        //        var ms2 = new MemoryStream(ms.ToArray());
+        //        Response.Buffer = true;
+        //        Response.ContentType = "application/pdf";
+        //        //Set default file Name as current datetime
+        //        Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("yyyyMMdd") + ".pdf");
+        //        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        //        ms2.WriteTo(Response.OutputStream);
+        //        Response.End();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Response.Write(ex.ToString());
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {

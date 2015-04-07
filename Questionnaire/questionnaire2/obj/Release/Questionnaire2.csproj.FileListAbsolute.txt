@@ -215,3 +215,7 @@ C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\EPPlus.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\EPPlus.xml
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\obj\Release\Questionnaire2.csprojResolveAssemblyReference.cache
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.License.dll
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.Pdf.dll
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.License.xml
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.Pdf.xml

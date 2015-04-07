@@ -217,7 +217,7 @@ namespace Questionnaire2.Controllers
 
             if (_db.UserLevels.Any(x => x.UserId == id) == false)
             {
-                var uL = new UserLevel { UserId = id, FinalStepLevel = "none" };
+                var uL = new UserLevel { UserId = id, FinalStepLevel = "none", FinalStepLevelDate = DateTime.Today };
                 _db.UserLevels.Add(uL);
                 _db.SaveChanges();
             }
