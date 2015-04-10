@@ -13,24 +13,24 @@
     <fieldset>
         <legend>Downloads</legend>
         <p>
-            <table style="width:400px; border:1px solid gray">
-                <tr style="border:1px solid gray">
+            <table style="width:400px; height:180px; border:0px solid gray">
+                <tr style="border:0px solid gray; font-weight:bold">
                     <td>Portfolio (MS Word)</td>
-                    <td><input type="submit" id="btnWord" name="Command" value="MS Word" title="Download" /></td>
+                    <td><input type="submit" id="btnWord" name="Command" value="MS Word" /></td>
                 </tr>
-                <tr style="border:1px solid gray">
+                <tr style="border:0px solid gray; font-weight:bold">
                     <td>Portfolio (pdf)</td>
                     <td><input type="submit" id="btnPdf" name="Command" value="Pdf" /></td>
                 </tr>               
-                <tr style="border:1px solid gray">
-                    <td>Level Certificate</td>
+                <tr style="border:0px solid gray; font-weight:bold">
+                    <td>Level Certificate (pdf)</td>
                     @if (Model != null && Model.FinalStepLevel != "")
                     {
                         <td><input type="submit" id="btnCert" name="Command" value="Certificate" /></td>
                     }
                     else
                     {
-                        <td><input type="submit" id="btnCert" name="Command" value="Certificate" disabled="True" /></td>
+                        <td>Not Yet Available</td>
                     }
                 </tr>
             </table>

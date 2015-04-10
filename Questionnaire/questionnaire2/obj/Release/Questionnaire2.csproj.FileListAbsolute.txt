@@ -112,7 +112,6 @@ C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Questionnaire2.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Questionnaire2.pdb
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Antlr3.Runtime.dll
-C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Aspose.Words.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\DocX.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\DotNetOpenAuth.AspNet.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\DotNetOpenAuth.Core.dll
@@ -149,7 +148,6 @@ C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Org.Mentalis.Security.Cryptography.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Mono.Math.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Antlr3.Runtime.pdb
-C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Aspose.Words.xml
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\DotNetOpenAuth.AspNet.xml
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\DotNetOpenAuth.Core.xml
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\DotNetOpenAuth.OAuth.xml
@@ -218,4 +216,5 @@ C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.License.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.Pdf.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.License.xml
-C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.Pdf.xml
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.Doc.dll
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Spire.Doc.xml

@@ -30,6 +30,97 @@ namespace Questionnaire2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(RegisterExternalLoginModel mReg, string Command, int id = 0)
         {
+            if (Command == "MonthlyReport")
+            {
+                var responses = _db.Responses
+                    .Where(w => w.QuestionnaireId == 1)
+                    .Select(r => new
+                    {
+                        userId = r.UserId,
+                        questionText = r.QuestionText,
+                        questionResponse = r.ResponseItem
+                    }).ToList();
+
+                var finalLevels = _db.UserLevels
+                    .Select(s => new
+                    {
+                        userId = s.UserId,
+                        finalStepLevel = s.FinalStepLevel,
+                        finalStepLevelDate = s.FinalStepLevelDate
+                    }).ToList();
+
+                var distinctIds = responses.Select(s => s.userId).Distinct();
+
+                ExcelPackage pck = new ExcelPackage();
+                var ws1 = pck.Workbook.Worksheets.Add("Users");
+                ws1.Cells[1, 1].Value = "First Name";
+                ws1.Cells[1, 2].Value = "Last Name";
+                ws1.Cells[1, 3].Value = "EMail";
+                ws1.Cells[1, 4].Value = "Home Address";
+                ws1.Cells[1, 5].Value = "City";
+                ws1.Cells[1, 6].Value = "State";
+                ws1.Cells[1, 7].Value = "Zip";
+                ws1.Cells[1, 8].Value = "Highest Edu";
+                ws1.Cells[1, 9].Value = "Cred Type";
+                ws1.Cells[1, 10].Value = "Lic Type";              
+                ws1.Cells[1, 11].Value = "EC Provider";
+                ws1.Cells[1, 12].Value = "T/TA Provider";
+                ws1.Cells[1, 13].Value = "Verified";
+                ws1.Cells[1, 14].Value = "Final Level";
+
+                var XLStartRow = 2;
+
+                var columnList = new System.Collections.Generic.List<string>();
+                columnList.Add("First Name");
+                columnList.Add("Last Name");
+                columnList.Add("EMail Address");
+                columnList.Add("Street Address/P.O. Box");
+                columnList.Add("City");
+                columnList.Add("State");
+                columnList.Add("Zip");
+                columnList.Add("Highest Level of Education Achieved");
+                columnList.Add("Credential Type");
+                columnList.Add("License Type");
+                columnList.Add("Would you like to be assigned a Career");
+                columnList.Add("T/TA Provider");
+
+                foreach (var d_id in distinctIds)
+                {
+                    for (int col = 0; col < columnList.Count; col++)
+                    {
+                        var temp = columnList[col];
+                        if (responses.Any(x => x.userId == d_id && x.questionText.ToLower().StartsWith(columnList[col].ToString().ToLower())))
+                        {
+                            ws1.Cells[XLStartRow, col + 1].Value = responses.Where(x => x.userId == d_id && x.questionText.ToLower().StartsWith(columnList[col].ToString().ToLower())).FirstOrDefault().questionResponse;
+                        }
+                        else
+                        {
+                            ws1.Cells[XLStartRow, col + 1].Value = "NA";
+                        }
+                    }
+                    XLStartRow = XLStartRow + 1;
+
+                    if (finalLevels.Any(x => x.userId == d_id))
+                    {
+                        ws1.Cells[XLStartRow, 13].Value = "Yes";
+                        ws1.Cells[XLStartRow, 14].Value = finalLevels.Where(x => x.userId == d_id).FirstOrDefault().finalStepLevel;
+                    }
+                    else
+                    {
+                        ws1.Cells[XLStartRow, 13].Value = "No";
+                    }
+                }
+
+                var stream = new MemoryStream();
+                pck.SaveAs(stream);
+
+                string fileName = "Monthly_Report.xlsx";
+                string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+                stream.Position = 0;
+                return File(stream, contentType, fileName);
+            }
+
             if (Command == "ExportAllData")
             {
                 var responses = _db.Responses

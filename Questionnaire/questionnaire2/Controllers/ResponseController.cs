@@ -12,9 +12,6 @@ using System.Transactions;
 using System;
 using System.Web;
 using System.Text;
-using Spire.Pdf;
-using Spire.Pdf.HtmlConverter;
-using Spire.Pdf.Graphics;
 using Spire.Doc;
 using Spire.Doc.Documents;
 using System.Threading;
@@ -80,7 +77,8 @@ namespace Questionnaire2.Controllers
 
 
                     Spire.Doc.Document doc = new Spire.Doc.Document(ms2);
-                    doc.SaveToFile("Portfolio.docx", Spire.Doc.FileFormat.Docx, System.Web.HttpContext.Current.Response, HttpContentType.InBrowser);
+
+                    doc.SaveToFile("Portfolio.docx", Spire.Doc.FileFormat.Docx, System.Web.HttpContext.Current.Response, HttpContentType.Attachment);
             
                     //Response.Clear();
                     //Response.AddHeader("content-disposition", "attachment; filename=\"Portfolio.docx\"");
@@ -100,14 +98,28 @@ namespace Questionnaire2.Controllers
                     var categories = new List<string> { "Personal Information", "Employment", "Education", "Coursework", "Certifications", "Licenses", "Credentials", "Training" };
                     var fui = new FormatUserInformation(responses, categories);
                     var formatted = fui.Format();
-                    var ms = MakeWordFile.CreateDocument(formatted);
+                    var ms = MakeWordFile.CreateDocument(formatted);                   
                     var ms2 = new MemoryStream(ms.ToArray());
 
-                    var appRoot = Request.PhysicalApplicationPath;
-                    var output = appRoot + "Content\\Portfolio.pdf";
-
                     Spire.Doc.Document doc = new Spire.Doc.Document(ms2);
-                    doc.SaveToFile("Portfolio.pdf", Spire.Doc.FileFormat.PDF, System.Web.HttpContext.Current.Response, HttpContentType.InBrowser);
+
+                    doc.SaveToFile("Portfolio.pdf", Spire.Doc.FileFormat.PDF, System.Web.HttpContext.Current.Response, HttpContentType.Attachment);
+
+                    //var appRoot = Request.PhysicalApplicationPath;
+                    //var output = appRoot + "Content\\Portfolio.pdf";
+                    //var ms3 = new MemoryStream();
+
+                    //Spire.Doc.Document doc = new Spire.Doc.Document(ms2);
+                    //doc.SaveToStream(ms3, Spire.Doc.FileFormat.PDF);
+
+                    //Response.Clear();
+                    //Response.AddHeader("content-disposition", "attachment; filename=\"Portfolio.pdf\"");
+                    //Response.ContentType = "application/pdf";
+                    //ms3.WriteTo(Response.OutputStream);
+                    //Response.End();
+
+                    //doc.SaveToFile(output, Spire.Doc.FileFormat.PDF);
+                    //doc.Close();
                 }
                 catch (Exception ex)
                 { Response.Write(ex.Message); }
@@ -118,7 +130,8 @@ namespace Questionnaire2.Controllers
                 UserLevel userLevel = _db.UserLevels.Where(q => q.UserId == userId).First();
                 var certificateDate = userLevel.FinalStepLevelDate.ToString("d");
                 var certificateLevel = userLevel.FinalStepLevel;
-
+                var signature = "Zelda Boyd";
+                
                 string firstName = "";
                 string lastName = "";
                 string middleInitial = "";
@@ -140,131 +153,25 @@ namespace Questionnaire2.Controllers
                     else
                         middleInitial = "";
                 }
-                
 
+                string fullName = firstName + " " + (middleInitial != "" ? middleInitial + " " : "") + lastName;
                 
                 var appRoot = Request.PhysicalApplicationPath;
-                var file = appRoot + "Content\\certificate.html";
-                var graphic_1 = appRoot + "Images\\VDSS.png";
-                var graphic_2 = appRoot + "Images\\Impact.png";
-                var output = appRoot + "Content\\output3.pdf";
+                var file = appRoot + "Content\\VPDR_Certificate_10.docx";
+                var newFile = appRoot + "Content\\VPDR_Certificate_" + lastName + "_" + firstName + ".docx";
+                var newPdf = appRoot + "Content\\VPDR_Certificate_" + lastName + "_" + firstName + ".pdf";
 
-                //Create a pdf document.
-                Spire.Pdf.PdfDocument doc = new Spire.Pdf.PdfDocument();
+                Spire.Doc.Document doc = new Spire.Doc.Document();
+                doc.LoadFromFile(file);
+                doc.Replace("PROVIDER", fullName, true, true);
+                doc.Replace("LEVEL", certificateLevel, true, true);
+                doc.Replace("DATE", certificateDate, true, true);
+                doc.Replace("SIGNATURE", signature, true, true);
+                //doc.SaveToFile(newPdf, Spire.Doc.FileFormat.PDF);
+                //doc.SaveToFile(newFile, Spire.Doc.FileFormat.Docx);
 
-                // Create one page
-                // PdfPageBase page = doc.Pages.Add();
-
-                //create section
-                PdfSection section = doc.Sections.Add();
-                section.PageSettings.Size = PdfPageSize.A4;
-                section.PageSettings.Orientation = PdfPageOrientation.Landscape;
-                PdfPageBase page = section.Pages.Add();               
-
-                
-                // VDSS Logo
-                var image = Spire.Pdf.Graphics.PdfImage.FromFile(graphic_1);
-                float width = image.Width * 0.45f;
-                float height = image.Height * 0.45f;
-                float x = (page.Canvas.ClientSize.Width - width) / 2;
-                page.Canvas.DrawImage(image, x, 20, width, height);
-
-                // Professional Development Certificate
-                PdfStringFormat centerAlignment = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
-                page.Canvas.DrawString("Professional Development Certificate",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 36f, PdfFontStyle.Italic),
-                                       new PdfSolidBrush(Color.Black),
-                                       page.Canvas.ClientSize.Width / 2, 125, centerAlignment);
-
-                // is hereby awarded to
-                page.Canvas.DrawString("is hereby awarded to",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 16f, PdfFontStyle.Regular),
-                                       new PdfSolidBrush(Color.Black),
-                                       page.Canvas.ClientSize.Width / 2, 170, centerAlignment);
-
-                // Recipient
-                string recipient = firstName + " " + middleInitial + " " + lastName;
-                recipient = recipient.Replace("  ", " ");
-                page.Canvas.DrawString(recipient,
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 28f, PdfFontStyle.Regular),
-                                       new PdfSolidBrush(Color.Black),
-                                       page.Canvas.ClientSize.Width / 2, 215, centerAlignment);
-
-                // in recognition of achievement of
-                page.Canvas.DrawString("in recognition of achievement of",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 16f, PdfFontStyle.Regular),
-                                       new PdfSolidBrush(Color.Black),
-                                       page.Canvas.ClientSize.Width / 2, 258, centerAlignment);
-
-                // Level
-                string level = certificateLevel;
-                page.Canvas.DrawString(level,
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 28f, PdfFontStyle.Regular),
-                                       new PdfSolidBrush(Color.Black),
-                                       page.Canvas.ClientSize.Width / 2, 303, centerAlignment);
-
-                // Career Pathways for Early Childhood & School-Age Practitioners
-                page.Canvas.DrawString("Career Pathways for Early Childhood &\nSchool-Age Practitioners",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 24f, PdfFontStyle.Bold),
-                                       new PdfSolidBrush(Color.Black),
-                                       page.Canvas.ClientSize.Width / 2, 362, centerAlignment);
-
-                // Impact Logo
-                var image2 = Spire.Pdf.Graphics.PdfImage.FromFile(graphic_2);
-                float width2 = image2.Width * 0.2f;
-                float height2 = image2.Height * 0.2f;
-                float x2 = (page.Canvas.ClientSize.Width - width) / 2;
-                page.Canvas.DrawImage(image2, x2 + 25, 405, width2, height2);
-
-                // Date line
-                page.Canvas.DrawString("_________________",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 24f, PdfFontStyle.Bold),
-                                       new PdfSolidBrush(Color.Black),
-                                       100, 415);
-
-                // Formated Date
-                string dateTime = certificateDate;
-                page.Canvas.DrawString(dateTime,
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 18f, PdfFontStyle.Bold),
-                                       new PdfSolidBrush(Color.Black),
-                                       170, 420);
-                
-                // Signature line
-                page.Canvas.DrawString("_________________",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 24f, PdfFontStyle.Bold),
-                                       new PdfSolidBrush(Color.Black),
-                                       445, 415);
-
-                // Signature
-                string signature = "Zelda Boyd";
-                page.Canvas.DrawString(signature,
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 18f, PdfFontStyle.Bold),
-                                       new PdfSolidBrush(Color.Black),
-                                       505, 420);
-
-                // Date
-                page.Canvas.DrawString("Date",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 12f, PdfFontStyle.Regular),
-                                       new PdfSolidBrush(Color.Black),
-                                       190, 445);
-
-                // Office of Early Childhood Development Virginia Department of Social Services
-                page.Canvas.DrawString("Office of Early Childhood Development\nVirginia Department of Social Services",
-                                       new Spire.Pdf.Graphics.PdfFont(PdfFontFamily.TimesRoman, 12f, PdfFontStyle.Regular),
-                                       new PdfSolidBrush(Color.Black),
-                                       450, 445);
-
-                // Frame
-                PdfPen pen = new PdfPen(Color.Black, 2.0f);
-                page.Canvas.DrawRectangle(pen, new System.Drawing.Rectangle(new Point(3, 3), new Size(755, 509)));
-                PdfPen pen2 = new PdfPen(Color.Black, 0.5f);
-                page.Canvas.DrawRectangle(pen2, new System.Drawing.Rectangle(new Point(0, 0), new Size(762, 515)));
-
-                //Save pdf file.
-                //doc.SaveToFile(output);
-                //doc.Close();
-
-                doc.SaveToHttpResponse("Certificate.pdf", System.Web.HttpContext.Current.Response, HttpReadType.Open);
+                var newPdfName = "VPDR_Certificate_" + lastName + "_" + firstName + ".pdf";
+                doc.SaveToFile(newPdfName, Spire.Doc.FileFormat.PDF, System.Web.HttpContext.Current.Response, HttpContentType.Attachment);
             }
 
             if (ModelState.IsValid)
@@ -272,7 +179,7 @@ namespace Questionnaire2.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View();
+            return RedirectToAction("Download");
         }
 
         //

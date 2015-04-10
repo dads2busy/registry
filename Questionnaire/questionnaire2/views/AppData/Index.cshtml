@@ -10,6 +10,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    <input type="submit" id="btnMonthRep" name="Command" value="MonthlyReport" />
     <input type="submit" id="btnExportAll" name="Command" value="ExportAllData" />
     <input type="submit" id="btnPdf" name="Command" value="VerificationsReport" />
 }
