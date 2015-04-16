@@ -397,6 +397,7 @@
     <Content Include="Content\VPDR_Certificate.docx" />
     <Content Include="Content\VPDR_Certificate_10.docx" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\Deploy Package.pubxml" />
     <None Include="Properties\PublishProfiles\VDSS2.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\bg-menu-main.png" />

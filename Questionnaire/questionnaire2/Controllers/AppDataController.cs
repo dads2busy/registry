@@ -32,6 +32,7 @@ namespace Questionnaire2.Controllers
         {
             if (Command == "MonthlyReport")
             {
+                // get all user responses
                 var responses = _db.Responses
                     .Where(w => w.QuestionnaireId == 1)
                     .Select(r => new
@@ -41,6 +42,7 @@ namespace Questionnaire2.Controllers
                         questionResponse = r.ResponseItem
                     }).ToList();
 
+                // get all user final levels
                 var finalLevels = _db.UserLevels
                     .Select(s => new
                     {
@@ -49,8 +51,10 @@ namespace Questionnaire2.Controllers
                         finalStepLevelDate = s.FinalStepLevelDate
                     }).ToList();
 
+                // get distinct user ids
                 var distinctIds = responses.Select(s => s.userId).Distinct();
 
+                // create spreadsheet, add worksheet, name columns
                 ExcelPackage pck = new ExcelPackage();
                 var ws1 = pck.Workbook.Worksheets.Add("Users");
                 ws1.Cells[1, 1].Value = "First Name";
@@ -61,37 +65,38 @@ namespace Questionnaire2.Controllers
                 ws1.Cells[1, 6].Value = "State";
                 ws1.Cells[1, 7].Value = "Zip";
                 ws1.Cells[1, 8].Value = "Highest Edu";
-                ws1.Cells[1, 9].Value = "Cred Type";
-                ws1.Cells[1, 10].Value = "Lic Type";              
-                ws1.Cells[1, 11].Value = "EC Provider";
-                ws1.Cells[1, 12].Value = "T/TA Provider";
-                ws1.Cells[1, 13].Value = "Verified";
-                ws1.Cells[1, 14].Value = "Final Level";
+                ws1.Cells[1, 9].Value = "EC Provider";
+                ws1.Cells[1, 10].Value = "T/TA Provider";
+                ws1.Cells[1, 11].Value = "Credentials";
+                ws1.Cells[1, 12].Value = "Verified";
+                ws1.Cells[1, 13].Value = "Final Level";
 
+                // set spreadsheet start row
                 var XLStartRow = 2;
 
+                // set column list
                 var columnList = new System.Collections.Generic.List<string>();
                 columnList.Add("First Name");
                 columnList.Add("Last Name");
-                columnList.Add("EMail Address");
-                columnList.Add("Street Address/P.O. Box");
+                columnList.Add("EMail");
+                columnList.Add("Home Address");
                 columnList.Add("City");
                 columnList.Add("State");
                 columnList.Add("Zip");
-                columnList.Add("Highest Level of Education Achieved");
-                columnList.Add("Credential Type");
-                columnList.Add("License Type");
-                columnList.Add("Would you like to be assigned a Career");
-                columnList.Add("T/TA Provider");
+                columnList.Add("Highest Level of Education");
+                columnList.Add("Career Pathways");
+                columnList.Add("TA Provider");
 
+                // for each user create a row in spreadsheet
                 foreach (var d_id in distinctIds)
                 {
+                    // fill first n columns of spreadsheet
                     for (int col = 0; col < columnList.Count; col++)
                     {
                         var temp = columnList[col];
-                        if (responses.Any(x => x.userId == d_id && x.questionText.ToLower().StartsWith(columnList[col].ToString().ToLower())))
+                        if (responses.Any(x => x.userId == d_id && x.questionText.ToLower().Contains(columnList[col].ToString().ToLower())))
                         {
-                            ws1.Cells[XLStartRow, col + 1].Value = responses.Where(x => x.userId == d_id && x.questionText.ToLower().StartsWith(columnList[col].ToString().ToLower())).FirstOrDefault().questionResponse;
+                            ws1.Cells[XLStartRow, col + 1].Value = responses.Where(x => x.userId == d_id && x.questionText.ToLower().Contains(columnList[col].ToString().ToLower())).FirstOrDefault().questionResponse;
                         }
                         else
                         {
@@ -100,23 +105,40 @@ namespace Questionnaire2.Controllers
                     }
                     XLStartRow = XLStartRow + 1;
 
+                    // fill credentials column of spreadsheet
+                    var credentialList = "";
+                    if (responses.Any(a => a.userId == d_id && a.questionText.ToLower().Contains("credential") && a.questionText.ToLower().Contains("type")))
+                    {
+                        var credentials = responses.Where(c => c.userId == d_id && c.questionText.ToLower().Contains("credential") && c.questionText.ToLower().Contains("type"));                      
+                        foreach (var c in credentials)
+                        {
+                            credentialList += c.questionResponse + ",";
+                        }
+                        // eliminate final comma
+                        if (credentialList.Length > 1)
+                        {
+                            credentialList = credentialList.Substring(0, credentialList.Length - 1);
+                        }
+                    }
+                    ws1.Cells[XLStartRow, 11].Value = credentialList;
+
+                    // fill "verified" and "final level" columns of spreadsheet
                     if (finalLevels.Any(x => x.userId == d_id))
                     {
-                        ws1.Cells[XLStartRow, 13].Value = "Yes";
-                        ws1.Cells[XLStartRow, 14].Value = finalLevels.Where(x => x.userId == d_id).FirstOrDefault().finalStepLevel;
+                        ws1.Cells[XLStartRow, 12].Value = "Yes";
+                        ws1.Cells[XLStartRow, 13].Value = finalLevels.Where(x => x.userId == d_id).FirstOrDefault().finalStepLevel;
                     }
                     else
                     {
-                        ws1.Cells[XLStartRow, 13].Value = "No";
+                        ws1.Cells[XLStartRow, 12].Value = "No";
                     }
                 }
 
+                // download spreadsheet
                 var stream = new MemoryStream();
                 pck.SaveAs(stream);
-
                 string fileName = "Monthly_Report.xlsx";
                 string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
                 stream.Position = 0;
                 return File(stream, contentType, fileName);
             }

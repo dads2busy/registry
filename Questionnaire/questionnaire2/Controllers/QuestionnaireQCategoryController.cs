@@ -107,7 +107,8 @@ namespace Questionnaire2.Controllers
             var newId = questionnaireqcategory.Id;
 
             /* get QuestionnaireQuestions to duplicate */
-            var toDuplicateQQs = _db.QuestionnaireQuestions.Where(x => x.QQCategoryId == toDuplicate.QCategoryId);
+            var QQCI = _db.QuestionnaireQCategories.Where(x => x.UserId == 0 && x.QCategoryId == toDuplicate.QCategoryId).FirstOrDefault().Id;
+            var toDuplicateQQs = _db.QuestionnaireQuestions.Where(x => x.QQCategoryId == QQCI); //toDuplicate.QCategoryId);
 
             foreach (var dupQ in toDuplicateQQs) //.Select(qq => new QuestionnaireQuestion()
             {
