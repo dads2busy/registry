@@ -329,7 +329,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // non-standard but works in WebKit and IE (but not Gecko or Opera),
     // we explicitly reject properties with dashes so that authors
     // developing in WebKit or IE first don't end up with
-    // browser-specific content by accident.
+    // browser-specific content by accQuestionnaire2.
 
     function testProps( props, prefixed ) {
         for ( var i in props ) {

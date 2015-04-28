@@ -23,24 +23,24 @@
                     
                     <ul class="menu">
                         @*<li>Administration: </li>*@
-                        <li>@if (Roles.IsUserInRole("CareProvider")) {
-                                @Html.ActionLink("Application", "Edit", "Response", new { area="", id = 1 }, null) }
+                        <li>@*@if (Roles.IsUserInRole("CareProvider")) {*@
+                                @Html.ActionLink("Application", "Edit", "Response", new { area="", id = 1 }, null) @*}*@
                         </li>
-                        <li>@if (Roles.IsUserInRole("CareProvider")) {
-                                @Html.ActionLink("Submit", "Verification", "Verification", new { area="" }, null) }
+                        <li>@*@if (Roles.IsUserInRole("CareProvider")) {*@
+                                @Html.ActionLink("Submit", "Verification", "Verification", new { area="" }, null) @*}*@
                         </li>
-                        <li>@if (Roles.IsUserInRole("CareProvider")) {
-                                @Html.ActionLink("Status", "Status", "CareProvider", new { area = "" }, null) }
+                        <li>@*@if (Roles.IsUserInRole("CareProvider")) {*@
+                                @Html.ActionLink("Status", "Status", "CareProvider", new { area = "" }, null) @*}*@
                         </li>
-                        @if (Roles.IsUserInRole("CareProvider")) {
+                        @*@if (Roles.IsUserInRole("CareProvider")) {*@
                         <li>
                                 @Html.ActionLink("My IMPACT", "Download", "Response", new { area = "" }, null) 
                         </li>
                         <li>
                             |
                         </li>
-                        }
-                        @if (Roles.IsUserInRole("Administrator")) {
+                        @*}*@
+                        @*@if (Roles.IsUserInRole("Administrator")) {*@
                         <li>                         
                             @Html.ActionLink("App Settings", "Index", "AppSetting", new { area = "" }, null)
                         </li>
@@ -68,13 +68,13 @@
                         <li>
                             |
                         </li>
-                        }
-                        @if (Roles.IsUserInRole("Verifier"))
+                        @*}*@
+                        @*@if (Roles.IsUserInRole("Verifier"))*@
                         {
                         <li>                         
                             @Html.ActionLink("Verifications", "Index", "Verification", new { area = "" }, null)
                         </li>
-                        }
+                        @*}*@
                         <li>@Html.ActionLink("Resources", "Index", "Info", new { area = "" }, null)</li>
                         <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, null)</li>
                     </ul>
